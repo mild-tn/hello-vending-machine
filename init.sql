@@ -1,0 +1,1 @@
+CREATE DATABASE "vending-machine-db";
