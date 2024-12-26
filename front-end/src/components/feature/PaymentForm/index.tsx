@@ -66,15 +66,18 @@ export const PaymentForm = ({ amountDue }: { amountDue: number }) => {
       ...coinList,
     ]);
     setCoinChange(map);
-  }, [coin, banknote]);
+  }, [coin, banknote, amountDue]);
 
   return (
     <div className="text-neutral-600">
-      <div className="flex flex-col gap-4 lg:bg-slate-100 bg-opacity-30 p-2 lg:p-4 rounded-lg">
+      <div className="flex flex-col gap-4 bg-slate-100 p-2 lg:p-4 rounded-lg">
         <div>
-          <p className="text-lg2 mb-5">Amount Due: {amountDue}฿</p>
-          <p className="text-lg2">Insert Coins</p>
-          <p className="text-lg mt-3">Banknote:</p>
+          <div className="text-center mb-4">
+            <h2 className="text-xl font-semibold text-gray-800">
+              Amount Due: {amountDue}฿
+            </h2>
+          </div>
+          <h3 className="text-lg font-medium mb-2">Insert Coins/Banknote:</h3>
           <div className="flex flex-row text-white flex-wrap gap-2">
             {banknoteList.map((banknote) => (
               <button
@@ -88,11 +91,10 @@ export const PaymentForm = ({ amountDue }: { amountDue: number }) => {
                   setBanknote((prevBanknotes) => [...prevBanknotes, banknote])
                 }
               >
-                <p className="text-lg">{banknote}฿</p>
+                <p className="text-lg font-semibold">{banknote}฿</p>
               </button>
             ))}
           </div>
-          <p className="text-lg mt-3">Coins:</p>
           <div className="flex flex-row text-white flex-wrap mt-2 gap-4">
             {coinList.map((coin) => (
               <button
@@ -102,15 +104,12 @@ export const PaymentForm = ({ amountDue }: { amountDue: number }) => {
                 onDragStart={(e) => handleDragStart(e, coin.toString(), "coin")}
                 onClick={() => setCoin((prevCoins) => [...prevCoins, coin])}
               >
-                <p className="text-lg">{coin}฿</p>
+                <p className="text-lg font-semibold">{coin}฿</p>
               </button>
             ))}
           </div>
         </div>
         <div className="lg:block hidden">
-          <p className="text-lg mt-3">
-            Drop your coin or banknote in below area:{" "}
-          </p>
           <input
             type="text"
             onDragOver={handleDragOver}
@@ -120,29 +119,36 @@ export const PaymentForm = ({ amountDue }: { amountDue: number }) => {
           />
         </div>
         <div>
+          <p className="text-gray-800">
+            Total inserted: <span className="font-bold">{amount}฿</span>
+          </p>
+          <p className="text-gray-800">
+            Change to be returned:{" "}
+            <span
+              className={
+                totalReturn >= 0
+                  ? "text-green-500 font-bold"
+                  : "text-red-500 font-bold"
+              }
+            >
+              {totalReturn}฿
+            </span>
+          </p>
           <div className="flex flex-row justify-between">
-            <div>
-              <p className="text-lg lg:text-lg2">Total inserted: {amount}฿</p>
-              <p className="text-lg lg:text-lg2">
-                Change to be returned: {totalReturn}฿
-              </p>
-              <div>
-                <span className="text-lg lg:text-lg2">
-                  Change detail:{" "}
-                  {Object.entries(coinChange).length > 0 ? (
-                    <div className="flex flex-row gap-4">
-                      {Object.entries(coinChange).map(([coin, value]) => (
-                        <span key={`_${coin}_${value}`}>
-                          {coin}฿ x {value},
-                        </span>
-                      ))}
-                    </div>
-                  ) : (
-                    <p>0฿ x 0</p>
-                  )}
-                </span>
-              </div>
-            </div>
+            <span className="text-gray-800">
+              Change detail:{" "}
+              {Object.entries(coinChange).length > 0 ? (
+                <div className="flex flex-row flex-wrap gap-2">
+                  {Object.entries(coinChange).map(([coin, value]) => (
+                    <span key={`_${coin}_${value}`} className="font-bold">
+                      {coin}฿ x {value} |
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="font-bold">0฿ x 0</p>
+              )}
+            </span>
           </div>
         </div>
       </div>
