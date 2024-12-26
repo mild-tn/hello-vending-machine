@@ -9,4 +9,12 @@ export class ProductRepository extends Repository<Product> {
     super(Product, dataSource.createEntityManager());
     this.repository = this.dataSource.getRepository(Product);
   }
+
+  getProducts(): Promise<Product[]> {
+    return this.repository.find({
+      order: {
+        id: 'ASC',
+      },
+    });
+  }
 }

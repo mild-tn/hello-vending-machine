@@ -1,10 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
+import { LoggerModule } from './infrastructure/services/logger/logger.module';
+import { ControllersModule } from './infrastructure/controllors/controllers.module';
+import { UsecasesProxyModule } from './infrastructure/usecase-proxy/usecase-proxy.module';
+import { EnvironmentConfigModule } from './infrastructure/config/env-config/env-config.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    LoggerModule,
+    ControllersModule,
+    UsecasesProxyModule.register(),
+    EnvironmentConfigModule,
+  ],
 })
 export class AppModule {}
