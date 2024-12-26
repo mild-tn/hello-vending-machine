@@ -10,10 +10,10 @@ export const ProductCard = ({
   setSelectedProduct: (product: Product) => void;
 }) => {
   return (
-    <div className="bg-gradient-to-br flex flex-col h-[180px] w-[140px]">
+    <div className="bg-gradient-to-br flex flex-col  lg:h-[180px] lg:w-[140px]">
       <button
         onClick={() => setSelectedProduct(product)}
-        className="relative bg-slate-50 overflow-hidden flex flex-col h-[150px] w-full"
+        className="relative bg-slate-50 overflow-hidden flex flex-col h-[100px] lg:h-[150px] w-full"
       >
         {product.images && (
           <Image
@@ -21,6 +21,7 @@ export const ProductCard = ({
             alt={product.name}
             sizes="300px"
             fill
+            priority={true}
             style={{
               objectFit: "cover",
             }}
@@ -32,12 +33,6 @@ export const ProductCard = ({
         <div>
           <span className="text-base text-Neutral/900">Price:</span>{" "}
           <span className="text-base text-Neutral/600">{product.price}฿</span>
-        </div>
-        <div>
-          <span className="text-base text-Neutral/900">Remain: </span>
-          <span className="text-base text-Neutral/600">
-            {product.stock_quantity} items
-          </span>
         </div>
       </div>
     </div>

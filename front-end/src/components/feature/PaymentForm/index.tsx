@@ -69,22 +69,23 @@ export const PaymentForm = ({ amountDue }: { amountDue: number }) => {
   }, [coin, banknote]);
 
   return (
-    <div>
-      <div>
-        <p className="text-lg2 mb-5">Amount Due: {amountDue}฿</p>
-      </div>
-      <div className="flex flex-col gap-4 bg-slate-100 bg-opacity-30 p-4 rounded-lg">
+    <div className="text-neutral-600">
+      <div className="flex flex-col gap-4 lg:bg-slate-100 bg-opacity-30 p-2 lg:p-4 rounded-lg">
         <div>
+          <p className="text-lg2 mb-5">Amount Due: {amountDue}฿</p>
           <p className="text-lg2">Insert Coins</p>
           <p className="text-lg mt-3">Banknote:</p>
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-row text-white flex-wrap gap-2">
             {banknoteList.map((banknote) => (
               <button
-                key={banknote}
+                key={`${banknote}_banknote`}
                 draggable
-                className="w-[120px] h-[50px] rounded-lg bg-green-400"
+                className="w-[90px] lg:w-[120px] h-[40px] lg:h-[50px] rounded-lg bg-green-400"
                 onDragStart={(e) =>
                   handleDragStart(e, banknote.toString(), "banknote")
+                }
+                onClick={() =>
+                  setBanknote((prevBanknotes) => [...prevBanknotes, banknote])
                 }
               >
                 <p className="text-lg">{banknote}฿</p>
@@ -92,20 +93,21 @@ export const PaymentForm = ({ amountDue }: { amountDue: number }) => {
             ))}
           </div>
           <p className="text-lg mt-3">Coins:</p>
-          <div className="flex flex-row mt-2 gap-4">
+          <div className="flex flex-row text-white flex-wrap mt-2 gap-4">
             {coinList.map((coin) => (
               <button
-                key={coin}
+                key={`${coin}_coin`}
                 draggable
-                className="w-[50px] h-[50px] rounded-full bg-yellow-400"
+                className="w-[40px] h-[40px] lg:w-[50px] lg:h-[50px] rounded-full bg-yellow-400"
                 onDragStart={(e) => handleDragStart(e, coin.toString(), "coin")}
+                onClick={() => setCoin((prevCoins) => [...prevCoins, coin])}
               >
                 <p className="text-lg">{coin}฿</p>
               </button>
             ))}
           </div>
         </div>
-        <div>
+        <div className="lg:block hidden">
           <p className="text-lg mt-3">
             Drop your coin or banknote in below area:{" "}
           </p>
@@ -113,22 +115,24 @@ export const PaymentForm = ({ amountDue }: { amountDue: number }) => {
             type="text"
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            className="w-full placeholder p-2 border-opacity-50 border-spacing-3 h-[200px] border-2 rounded-md border-dashed border-gray-500"
-            placeholder="Drop your coin or banknote here"
+            className="w-full text-center p-2 border-opacity-50 border-spacing-3 h-[100px] lg:h-[200px] border-2 rounded-md border-dashed border-gray-500"
+            placeholder="Drop your Coins or Banknotes here"
           />
         </div>
         <div>
           <div className="flex flex-row justify-between">
             <div>
-              <p className="text-lg2">Total inserted: {amount}฿</p>
-              <p className="text-lg2">Change to be returned: {totalReturn}฿</p>
+              <p className="text-lg lg:text-lg2">Total inserted: {amount}฿</p>
+              <p className="text-lg lg:text-lg2">
+                Change to be returned: {totalReturn}฿
+              </p>
               <div>
-                <span className="text-lg2">
+                <span className="text-lg lg:text-lg2">
                   Change detail:{" "}
                   {Object.entries(coinChange).length > 0 ? (
                     <div className="flex flex-row gap-4">
                       {Object.entries(coinChange).map(([coin, value]) => (
-                        <span key={coin}>
+                        <span key={`_${coin}_${value}`}>
                           {coin}฿ x {value},
                         </span>
                       ))}

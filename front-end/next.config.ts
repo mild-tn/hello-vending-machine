@@ -5,14 +5,18 @@ const nextConfig: NextConfig = {
     API_URL: process.env.API_URL,
   },
   images: {
-    domains: [
-      "images.pexels.com",
-      "st.bigc-cs.com",
-      "example.com",
-      "st.depositphotos.com",
-      "cdn.imweb.me",
-      "down-th.img.susercontent.com",
-      "beverages2u.com",
+    remotePatterns: [
+      { protocol: "https", hostname: "images.pexels.com" },
+      { protocol: "https", hostname: "st.bigc-cs.com" },
+      { protocol: "https", hostname: "example.com" },
+      { protocol: "https", hostname: "st.depositphotos.com" },
+      { protocol: "https", hostname: "cdn.imweb.me" },
+      { protocol: "https", hostname: "down-th.img.susercontent.com" },
+      { protocol: "https", hostname: "beverages2u.com" },
+      { protocol: "https", hostname: "market.borong.com" },
+      { protocol: "https", hostname: "assets.tops.co.th" },
+      { protocol: "https", hostname: "www.newsnationnow.com" },
+      { protocol: "https", hostname: "media.istockphoto.com" },
     ],
   },
 };
