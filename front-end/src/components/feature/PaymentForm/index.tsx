@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 
-export const PaymentForm = ({ amountDue }: { amountDue: number }) => {
+type PaymentFormType = {
+  amountDue: number;
+  onChange: (value: { total: number; totalReturn: number }) => void;
+};
+export const PaymentForm = ({ amountDue, onChange }: PaymentFormType) => {
   const coinList = [10, 5, 1];
   const banknoteList = [1000, 500, 100, 50, 20];
   const [coin, setCoin] = React.useState<number[] | []>([]);
@@ -58,6 +62,7 @@ export const PaymentForm = ({ amountDue }: { amountDue: number }) => {
     const totalCoin = coin?.reduce((acc, curr) => acc + curr, 0);
     const totalBanknote = banknote?.reduce((acc, curr) => acc + curr, 0);
     const total = totalCoin + totalBanknote;
+    console.log("total", total, totalReturn, totalBanknote, totalCoin);
     setTotalReturn(total - amountDue);
     setAmount(total);
 
@@ -66,10 +71,14 @@ export const PaymentForm = ({ amountDue }: { amountDue: number }) => {
       ...coinList,
     ]);
     setCoinChange(map);
+    onChange({
+      total,
+      totalReturn: total - amountDue,
+    });
   }, [coin, banknote, amountDue]);
 
   return (
-    <div className="text-neutral-600">
+    <div className="text-neutral-600 sm:w-[500px]">
       <div className="flex flex-col gap-4 bg-slate-100 p-2 lg:p-4 rounded-lg">
         <div>
           <div className="text-center mb-4">
@@ -77,53 +86,96 @@ export const PaymentForm = ({ amountDue }: { amountDue: number }) => {
               Amount Due: {amountDue}฿
             </h2>
           </div>
-          <h3 className="text-lg font-medium mb-2">Insert Coins/Banknote:</h3>
-          <div className="flex flex-row text-white flex-wrap gap-2">
-            {banknoteList.map((banknote) => (
-              <button
-                key={`${banknote}_banknote`}
-                draggable
-                className="w-[90px] lg:w-[120px] h-[40px] lg:h-[50px] rounded-lg bg-green-400"
-                onDragStart={(e) =>
-                  handleDragStart(e, banknote.toString(), "banknote")
-                }
-                onClick={() =>
-                  setBanknote((prevBanknotes) => [...prevBanknotes, banknote])
-                }
-              >
-                <p className="text-lg font-semibold">{banknote}฿</p>
-              </button>
-            ))}
-          </div>
-          <div className="flex flex-row text-white flex-wrap mt-2 gap-4">
-            {coinList.map((coin) => (
-              <button
-                key={`${coin}_coin`}
-                draggable
-                className="w-[40px] h-[40px] lg:w-[50px] lg:h-[50px] rounded-full bg-yellow-400"
-                onDragStart={(e) => handleDragStart(e, coin.toString(), "coin")}
-                onClick={() => setCoin((prevCoins) => [...prevCoins, coin])}
-              >
-                <p className="text-lg font-semibold">{coin}฿</p>
-              </button>
-            ))}
+          <h3 className="text-lg2 font-semibold mb-2">
+            Insert Coins/Banknote:
+          </h3>
+          <div className="space-y-4">
+            <div>
+              <p className="mb-2 font-semibold text-gray-700">Banknotes:</p>
+              <div className="grid grid-cols-5 gap-1">
+                {banknoteList.map((note) => (
+                  <button
+                    key={`${note}_banknote`}
+                    draggable
+                    onDragStart={(e) => {
+                      handleDragStart(e, note.toString(), "banknote");
+                    }}
+                    onClick={(e) => {
+                      if (
+                        (coin.length > 0 || banknote.length > 0) &&
+                        amount >= amountDue
+                      ) {
+                        e.preventDefault();
+                        return;
+                      }
+                      setBanknote((prevBanknotes) => [...prevBanknotes, note]);
+                    }}
+                    className="w-full py-3 bg-green-300 hover:bg-green-400 text-green-800 font-bold rounded shadow"
+                  >
+                    {note}฿
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="mb-2 font-semibold text-gray-700">Coins:</p>
+              <div className="flex flex-row gap-4">
+                {coinList.map((item) => (
+                  <button
+                    key={`${item}_coin`}
+                    draggable
+                    className="w-[50px] h-[50px] rounded-full py-3 bg-yellow-300 hover:bg-yellow-400 text-yellow-800 font-bold shadow"
+                    onDragStart={(e) =>
+                      handleDragStart(e, item.toString(), "coin")
+                    }
+                    onClick={(e) => {
+                      if (
+                        (coin.length > 0 || banknote.length > 0) &&
+                        amount >= amountDue
+                      ) {
+                        e.preventDefault();
+                        return;
+                      }
+                      setCoin((prevCoins) => [...prevCoins, item]);
+                    }}
+                  >
+                    {coin}฿
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
         <div className="lg:block hidden">
           <input
             type="text"
             onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            className="w-full text-center p-2 border-opacity-50 border-spacing-3 h-[100px] lg:h-[200px] border-2 rounded-md border-dashed border-gray-500"
+            onDrop={(e) => {
+              if (
+                (coin.length > 0 || banknote.length > 0) &&
+                amount >= amountDue
+              ) {
+                e.preventDefault();
+                return;
+              }
+              handleDrop(e);
+            }}
+            className="w-full disabled:bg-slate-200 text-center p-2 border-opacity-50 border-spacing-3 h-[100px] lg:h-[200px] border-2 rounded-md border-dashed border-gray-500"
             placeholder="Drop your Coins or Banknotes here"
+            disabled={
+              (coin.length > 0 || banknote.length > 0) && amount >= amountDue
+            }
           />
         </div>
-        <div>
-          <p className="text-gray-800">
-            Total inserted: <span className="font-bold">{amount}฿</span>
+        <div className="mt-4 space-y-2 text-gray-800">
+          <p className="flex justify-between">
+            <span>Total inserted:</span>
+            <span className="font-bold">{amount}฿</span>
           </p>
-          <p className="text-gray-800">
-            Change to be returned:{" "}
+
+          <p className="flex justify-between">
+            <span>Change to be returned:</span>
             <span
               className={
                 totalReturn >= 0
@@ -134,21 +186,26 @@ export const PaymentForm = ({ amountDue }: { amountDue: number }) => {
               {totalReturn}฿
             </span>
           </p>
-          <div className="flex flex-row justify-between">
-            <span className="text-gray-800">
-              Change detail:{" "}
-              {Object.entries(coinChange).length > 0 ? (
-                <div className="flex flex-row flex-wrap gap-2">
-                  {Object.entries(coinChange).map(([coin, value]) => (
-                    <span key={`_${coin}_${value}`} className="font-bold">
-                      {coin}฿ x {value} |
+
+          <div className="mt-2">
+            <p className="mb-2">Change detail:</p>
+            {Object.entries(coinChange).length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6">
+                {Object.entries(coinChange).map(([coin, value]) => (
+                  <div
+                    key={`_${coin}_${value}`}
+                    className="flex justify-start items-center px-1 py-1 bg-gray-100 rounded shadow-sm"
+                  >
+                    <span className="text-green-500 font-bold">{coin}฿ </span>
+                    <span className="text-gray-800 font-semibold">
+                      x{value}
                     </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="font-bold">0฿ x 0</p>
-              )}
-            </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="font-bold text-gray-500">0฿ x 0</p>
+            )}
           </div>
         </div>
       </div>

@@ -17,4 +17,19 @@ export class ProductRepository extends Repository<Product> {
       },
     });
   }
+
+  getProduct(productId: number): Promise<Product> {
+    return this.repository.findOne({
+      where: {
+        id: productId,
+      },
+    });
+  }
+
+  updateProduct(productId: number, product: Product): Promise<Product> {
+    return this.repository.save({
+      id: productId,
+      ...product,
+    });
+  }
 }

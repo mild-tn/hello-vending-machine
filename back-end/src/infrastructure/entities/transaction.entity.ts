@@ -5,7 +5,7 @@ import {
   ManyToOne,
   Column,
 } from 'typeorm';
-import { Customer } from './cutomer.entity';
+import { Customer } from './customer.entity';
 import { ProductMachine } from './product-machine.entity';
 
 @Entity()

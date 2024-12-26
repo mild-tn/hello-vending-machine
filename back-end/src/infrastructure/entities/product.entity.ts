@@ -19,5 +19,5 @@ export class Product {
   price: number;
 
   @Column()
-  stock_quantity: number;
+  stockQuantity: number;
 }
