@@ -13,4 +13,15 @@ export class TransactionRepository extends Repository<Transaction> {
   createTransaction(transaction: Transaction): Promise<Transaction> {
     return this.repository.save(transaction);
   }
+
+  getTransactionByCustomerId(customerId: number): Promise<Transaction[]> {
+    return this.repository.find({
+      where: {
+        customerId: customerId,
+      },
+      order: {
+        updatedAt: 'DESC',
+      },
+    });
+  }
 }

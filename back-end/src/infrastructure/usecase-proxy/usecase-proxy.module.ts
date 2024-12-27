@@ -10,6 +10,7 @@ import { CreateTransactionUseCases } from 'src/usecases/transaction/create-trans
 import { TransactionRepository } from '../repositories/transaction.repository';
 import { ProductMachineRepository } from '../repositories/product-machine.repository';
 import { CustomerRepository } from '../repositories/customer.repository';
+import { GetTransactionByCustomerIdUseCases } from 'src/usecases/transaction/get-transaction-by-customer-id.usecase';
 
 @Module({
   imports: [LoggerModule, EnvironmentConfigModule, RepositoriesModule],
@@ -17,6 +18,8 @@ import { CustomerRepository } from '../repositories/customer.repository';
 export class UsecasesProxyModule {
   static readonly GET_PRODUCTS_USECASE = 'GET_PRODUCTS_USECASE';
   static readonly CREATE_TRANSACTION_USECASE = 'CREATE_TRANSACTION_USECASE';
+  static readonly GET_TRANSACTIONS_BY_CUSTOMER_ID_USECASE =
+    'GET_TRANSACTIONS_BY_CUSTOMER_ID_USECASE';
 
   static register(): DynamicModule {
     return {
@@ -58,10 +61,23 @@ export class UsecasesProxyModule {
             );
           },
         },
+        {
+          inject: [LoggerService, TransactionRepository],
+          provide: UsecasesProxyModule.GET_TRANSACTIONS_BY_CUSTOMER_ID_USECASE,
+          useFactory(
+            logger: LoggerService,
+            transactionRepo: TransactionRepository,
+          ) {
+            return new UseCaseProxy(
+              new GetTransactionByCustomerIdUseCases(logger, transactionRepo),
+            );
+          },
+        },
       ],
       exports: [
         UsecasesProxyModule.GET_PRODUCTS_USECASE,
         UsecasesProxyModule.CREATE_TRANSACTION_USECASE,
+        UsecasesProxyModule.GET_TRANSACTIONS_BY_CUSTOMER_ID_USECASE,
       ],
     };
   }

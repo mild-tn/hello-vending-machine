@@ -39,11 +39,11 @@ export const PaymentForm = () => {
   }, [coins, banknotes, amountDue]);
 
   return (
-    <div className="text-neutral-600 bg-slate-100 min-h-[500px]">
-      <div className="flex flex-col gap-4  p-2 lg:p-4 md:rounded-none rounded-lg">
+    <div className="text-neutral-600">
+      <div className="flex flex-col gap-4 p-2 lg:p-4 md:rounded-none rounded-lg">
         <div>
-          <div className="text-center mb-2">
-            <h2 className="text-lg2 font-semibold text-gray-800">
+          <div className="text-center lg:mb-2">
+            <h2 className="text-lg lg:text-lg2 font-semibold text-gray-800">
               Amount Due: {amountDue}฿
             </h2>
           </div>
@@ -67,13 +67,13 @@ export const PaymentForm = () => {
             isCreateTransactionAfterDrop
           />
         </div>
-        <div className="mt-4 space-y-2 text-gray-800">
+        <div className="lg:mt-4 lg:space-y-2 text-gray-800">
           <p className="flex justify-between">
             <span>Total inserted:</span>
             <span className="font-bold">{amount}฿</span>
           </p>
 
-          <p className="flex justify-between">
+          <p className="flex items-end justify-between">
             <span>Change to be returned:</span>
             <span
               className={
@@ -86,7 +86,7 @@ export const PaymentForm = () => {
             </span>
           </p>
 
-          <div className="mt-2">
+          <div className="lg:mt-2">
             <p className="mb-2">Change detail:</p>
             {Object.entries(coinChange).length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3">

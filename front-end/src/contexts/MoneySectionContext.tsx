@@ -41,11 +41,9 @@ export const MoneySectionContextProvider = ({
   const [amountDue, setAmountDue] = useState<number>(0);
   const [totalReturn, setTotalReturn] = useState<number>(0);
 
-  const reset = () => {
+  const resetMoney = () => {
     setCoins([]);
     setBanknotes([]);
-    setAmount(0);
-    setAmountDue(0);
     setTotalReturn(0);
   };
 
@@ -61,7 +59,7 @@ export const MoneySectionContextProvider = ({
       setAmountDue,
       totalReturn,
       setTotalReturn,
-      resetMoney: reset,
+      resetMoney,
     }),
     [
       coins,

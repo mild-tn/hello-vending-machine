@@ -8,7 +8,10 @@ import { Product } from "@/types/product";
 import { Transaction } from "@/types/transaction";
 import { ProductContext } from "@/contexts/ProductContext";
 import { useProductsQuery } from "@/hooks/useProducts";
-import { useMutationTransaction } from "@/hooks/useTransactions";
+import {
+  useMutationTransaction,
+  useTransactionsQuery,
+} from "@/hooks/useTransactions";
 import { MoneySectionContext } from "@/contexts/MoneySectionContext";
 
 export const ActionButtons = () => {
@@ -19,6 +22,10 @@ export const ActionButtons = () => {
   const { refetch } = useProductsQuery({
     enabled: false,
   });
+  const { refetch: refetchTransaction } = useTransactionsQuery({
+    enabled: false,
+    customerId: 1,
+  });
   const { mutate } = useMutationTransaction({
     onSuccess: (result: Transaction) => {
       refetch().then(() => {
@@ -27,6 +34,7 @@ export const ActionButtons = () => {
           stockQuantity: result?.stockQuantity ?? 0,
         } as Product);
       });
+      refetchTransaction();
     },
   });
 

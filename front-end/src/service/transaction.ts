@@ -13,3 +13,11 @@ export const createTransaction = async (
     body: JSON.stringify(transaction),
   }).then((res) => res.json());
 };
+
+export const getTransactionsByCustomerId = async (
+  customerId: number
+): Promise<Transaction[]> => {
+  return await fetch(`${API_URL}/transactions?customerId=${customerId}`).then(
+    (res) => res.json()
+  );
+};

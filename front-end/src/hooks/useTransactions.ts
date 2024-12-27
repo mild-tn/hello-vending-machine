@@ -1,6 +1,9 @@
-import { createTransaction } from "@/service/transaction";
+import {
+  createTransaction,
+  getTransactionsByCustomerId,
+} from "@/service/transaction";
 import { Transaction, TransactionBody } from "@/types/transaction";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 export const useMutationTransaction = ({
   onSuccess,
 }: {
@@ -14,4 +17,20 @@ export const useMutationTransaction = ({
   });
 
   return { mutate };
+};
+
+export const useTransactionsQuery = ({
+  enabled = true,
+  customerId,
+}: {
+  enabled?: boolean;
+  customerId: number;
+}) => {
+  return useQuery<Transaction[]>({
+    queryKey: ["transactions", customerId],
+    queryFn: async () => {
+      return await getTransactionsByCustomerId(customerId);
+    },
+    enabled,
+  });
 };

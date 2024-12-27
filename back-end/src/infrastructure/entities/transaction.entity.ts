@@ -17,6 +17,8 @@ export class Transaction {
   @JoinColumn({ name: 'customer_id' })
   customer: Customer;
 
+  customerId: number;
+
   @ManyToOne(() => ProductMachine)
   @JoinColumn({ name: 'product_machine_id' })
   productMachine: ProductMachine;

@@ -4,7 +4,6 @@ import { Fragment, useContext } from "react";
 import Image from "next/image";
 
 import { ProductCard } from "@/components/feature/VendingMachine/ProductCard";
-import { ModalContext } from "@/contexts/ModalContext";
 import { ArrowNextIcon } from "@/components/common/icons/ArrowNextIcon";
 import { ArrowPreviousIcon } from "@/components/common/icons/ArrowPreviousIcon";
 import { useStepPreview } from "@/hooks/useStepPreview";
@@ -16,7 +15,6 @@ import { MoneySectionContext } from "@/contexts/MoneySectionContext";
 
 export const ProductPreview = () => {
   const { product, setProduct } = useContext(ProductContext);
-  const { openModal } = useContext(ModalContext);
   const { setAmountDue, resetMoney } = useContext(MoneySectionContext);
 
   const { data = [], isLoading, isRefetching } = useProductsQuery();
@@ -32,14 +30,14 @@ export const ProductPreview = () => {
   return (
     <div className="flex flex-row gap-4">
       <div className="w-full">
-        <div className="flex justify-start items-center bg-blue-700 bg-opacity-40 w-full h-[200px] sm:h-[190px]">
+        <div className="flex justify-start items-center bg-blue-700 bg-opacity-40 w-full lg:h-[200px] sm:h-[270px]">
           {!product && (
             <div className="flex flex-col justify-center items-center w-full h-full">
               <div className="text-lg3 text-neutral-100">Select a product</div>
             </div>
           )}
           {product && (
-            <Fragment>
+            <div className="flex flex-col lg:flex-row justify-center items-center lg:w-full md:w-[60%] h-full">
               <div className="flex flex-row justify-center items-center w-full h-full">
                 <button
                   className="sm:block hidden"
@@ -52,8 +50,8 @@ export const ProductPreview = () => {
                 >
                   <ArrowPreviousIcon />
                 </button>
-                <div className="w-full lg:w-[230px] h-full flex justify-center items-center sm:px-2">
-                  <div className="w-full relative bg-white overflow-hidden h-full md:h-[170px]">
+                <div className="w-full sm:h-[160px] lg:w-[230px] h-full flex justify-center items-center sm:px-2">
+                  <div className="w-full relative bg-white overflow-hidden lg:h-[160px] sm:h-[120px]">
                     {product?.images && (
                       <Image
                         src={product?.images[currentStep]}
@@ -96,26 +94,14 @@ export const ProductPreview = () => {
                   </div>
                   <div>{product?.description}</div>
                 </div>
-                <button
-                  className="bg-blue-500 md:hidden  text-neutral-100 rounded-lg px-2 py-1"
-                  disabled={product?.stockQuantity === 0}
-                  onClick={() => {
-                    if (product?.stockQuantity === 0) {
-                      alert("Out of stock");
-                      return;
-                    }
-                    openModal();
-                  }}
-                >
-                  <span className="text-lg text-neutral-100">
-                    Buy {product?.price}฿
-                  </span>
-                </button>
               </div>
-            </Fragment>
+            </div>
           )}
+          <div className="sm:flex lg:hidden bg-gray-300 justify-center items-center w-[40%] h-full">
+            <PaymentForm />
+          </div>
         </div>
-        <div className="grid grid-cols-3 sm:grid-cols-4 pt-2 gap-x-2 gap-y-3 items-center">
+        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 pt-2 gap-x-2 gap-y-3 items-center">
           {isLoading && <div>Loading...</div>}
           {data?.map((product: Product) => (
             <ProductCard
@@ -132,9 +118,11 @@ export const ProductPreview = () => {
         </div>
       </div>
 
-      <div className="w-[40%] flex flex-col gap-2">
-        <PaymentForm />
-        <div className="bg-neutral-600 p-1 flex flex-col justify-center items-center w-full h-full">
+      <div className="w-[40%] lg:block hidden flex-col gap-2">
+        <div className=" bg-slate-100 min-h-[500px]">
+          <PaymentForm />
+        </div>
+        <div className="bg-neutral-600 p-1 flex flex-col justify-center items-center w-full mt-2 h-[250px]">
           {!product?.isUpdated && (
             <p className="text-lg font-bold">Get your product here</p>
           )}
@@ -153,9 +141,9 @@ export const ProductPreview = () => {
                   />
                 )}
               </div>
-              <p className="text-base text-center flex-wrap font-bold">
+              <p className="text-base text-center p-1 flex-wrap font-bold">
                 Thank you for your purchase of {product?.name} for{" "}
-                {product?.price}฿ ! Enjoy your snack! 🍫
+                {product?.price}฿ <br /> Enjoy your snack! 🍫
               </p>
             </Fragment>
           )}
