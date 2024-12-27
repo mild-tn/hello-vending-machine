@@ -1,68 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { MoneySection } from "./MoneySection";
+import { MoneyInput } from "./MoneyInput";
+import { useDragAndDrop } from "@/hooks/useDragAndDrop";
+import { calculateCoinChange } from "@/usecase/calculate-coin-change";
 
 type PaymentFormType = {
   amountDue: number;
   onChange: (value: { total: number; totalReturn: number }) => void;
 };
+
 export const PaymentForm = ({ amountDue, onChange }: PaymentFormType) => {
   const coinList = [10, 5, 1];
   const banknoteList = [1000, 500, 100, 50, 20];
-  const [coin, setCoin] = React.useState<number[] | []>([]);
-  const [banknote, setBanknote] = React.useState<number[] | []>([]);
-  const [totalReturn, setTotalReturn] = React.useState<number>(0);
-  const [amount, setAmount] = React.useState<number>(0);
-  const [coinChange, setCoinChange] = React.useState<{ [key: number]: number }>(
-    {}
-  );
-
-  const handleDragStart = (
-    e: React.DragEvent<HTMLButtonElement>,
-    value: string,
-    type: string
-  ) => {
-    e.dataTransfer.setData("text/plain", JSON.stringify({ value, type }));
-    e.dataTransfer.effectAllowed = "move";
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const data = e.dataTransfer.getData("text/plain");
-    const { value, type } = JSON.parse(data);
-    if (type === "coin") {
-      setCoin((prevCoins) =>
-        prevCoins ? [...prevCoins, Number(value)] : [Number(value)]
-      );
-    } else {
-      setBanknote((prevBanknotes) =>
-        prevBanknotes ? [...prevBanknotes, Number(value)] : [Number(value)]
-      );
-    }
-  };
-
-  const calculateCoinChange = (amount: number, coinOrBankList: number[]) => {
-    const result: { [key: number]: number } = {};
-
-    for (const coin of coinOrBankList) {
-      const count = Math.floor(amount / coin);
-      if (count > 0) {
-        amount = amount % coin;
-        result[coin] = count;
-      }
-    }
-
-    return result;
-  };
+  const [coin, setCoin] = useState<number[] | []>([]);
+  const [banknote, setBanknote] = useState<number[] | []>([]);
+  const [totalReturn, setTotalReturn] = useState<number>(0);
+  const [amount, setAmount] = useState<number>(0);
+  const [coinChange, setCoinChange] = useState<{ [key: number]: number }>({});
+  const { handleDragOver, handleDragStart, handleDrop } = useDragAndDrop();
 
   useEffect(() => {
     const totalCoin = coin?.reduce((acc, curr) => acc + curr, 0);
     const totalBanknote = banknote?.reduce((acc, curr) => acc + curr, 0);
     const total = totalCoin + totalBanknote;
-    console.log("total", total, totalReturn, totalBanknote, totalCoin);
     setTotalReturn(total - amountDue);
     setAmount(total);
 
@@ -75,6 +35,7 @@ export const PaymentForm = ({ amountDue, onChange }: PaymentFormType) => {
       total,
       totalReturn: total - amountDue,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coin, banknote, amountDue]);
 
   return (
@@ -86,86 +47,40 @@ export const PaymentForm = ({ amountDue, onChange }: PaymentFormType) => {
               Amount Due: {amountDue}฿
             </h2>
           </div>
-          <h3 className="text-lg2 font-semibold mb-2">
-            Insert your Coins/Banknote:
-          </h3>
-          <div className="space-y-4">
-            <div>
-              <p className="mb-2 font-semibold text-gray-700">Banknotes:</p>
-              <div className="grid grid-cols-5 gap-1">
-                {banknoteList.map((note) => (
-                  <button
-                    key={`${note}_banknote`}
-                    draggable
-                    onDragStart={(e) => {
-                      handleDragStart(e, note.toString(), "banknote");
-                    }}
-                    onClick={(e) => {
-                      if (
-                        (coin.length > 0 || banknote.length > 0) &&
-                        amount >= amountDue
-                      ) {
-                        e.preventDefault();
-                        return;
-                      }
-                      setBanknote((prevBanknotes) => [...prevBanknotes, note]);
-                    }}
-                    className="w-full py-3 bg-green-300 hover:bg-green-400 text-green-800 font-bold rounded shadow"
-                  >
-                    {note}฿
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="mb-2 font-semibold text-gray-700">Coins:</p>
-              <div className="flex flex-row gap-4">
-                {coinList.map((item) => (
-                  <button
-                    key={`${item}_coin`}
-                    draggable
-                    className="w-[50px] h-[50px] rounded-full py-3 bg-yellow-300 hover:bg-yellow-400 text-yellow-800 font-bold shadow"
-                    onDragStart={(e) =>
-                      handleDragStart(e, item.toString(), "coin")
-                    }
-                    onClick={(e) => {
-                      if (
-                        (coin.length > 0 || banknote.length > 0) &&
-                        amount >= amountDue
-                      ) {
-                        e.preventDefault();
-                        return;
-                      }
-                      setCoin((prevCoins) => [...prevCoins, item]);
-                    }}
-                  >
-                    {item}฿
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
+          <MoneySection
+            coinList={coinList}
+            banknoteList={banknoteList}
+            coin={coin}
+            banknote={banknote}
+            amount={amount}
+            amountDue={amountDue}
+            setCoin={setCoin}
+            setBanknote={setBanknote}
+            handleDragStart={handleDragStart}
+          />
         </div>
         <div className="lg:block hidden">
-          <input
-            type="text"
-            onDragOver={handleDragOver}
-            onDrop={(e) => {
-              if (
-                (coin.length > 0 || banknote.length > 0) &&
-                amount >= amountDue
-              ) {
-                e.preventDefault();
-                return;
-              }
-              handleDrop(e);
+          <MoneyInput
+            coin={coin}
+            banknote={banknote}
+            amount={amount}
+            amountDue={amountDue}
+            handleDragOver={handleDragOver}
+            handleDrop={(e) => {
+              handleDrop(e, ({ value, type }) => {
+                if (type === "coin") {
+                  setCoin((prevCoins) =>
+                    prevCoins ? [...prevCoins, Number(value)] : [Number(value)]
+                  );
+                } else {
+                  setBanknote((prevBanknotes) =>
+                    prevBanknotes
+                      ? [...prevBanknotes, Number(value)]
+                      : [Number(value)]
+                  );
+                }
+              });
             }}
-            className="w-full disabled:bg-slate-200 text-center p-2 border-opacity-50 border-spacing-3 h-[100px] lg:h-[150px] border-2 rounded-md border-dashed border-gray-500"
-            placeholder="Drop your Coins or Banknotes here"
-            disabled={
-              (coin.length > 0 || banknote.length > 0) && amount >= amountDue
-            }
           />
         </div>
         <div className="mt-4 space-y-2 text-gray-800">

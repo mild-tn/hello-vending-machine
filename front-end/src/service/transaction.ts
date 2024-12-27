@@ -2,10 +2,10 @@ import { Transaction, TransactionBody } from "@/types/transaction";
 
 const API_URL = process.env.API_URL;
 
-export const createTransaction = (
+export const createTransaction = async (
   transaction: TransactionBody
 ): Promise<Transaction> => {
-  return fetch(`${API_URL}/transactions`, {
+  return await fetch(`${API_URL}/transactions`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
