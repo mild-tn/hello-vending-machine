@@ -87,7 +87,7 @@ export const PaymentForm = ({ amountDue, onChange }: PaymentFormType) => {
             </h2>
           </div>
           <h3 className="text-lg2 font-semibold mb-2">
-            Insert Coins/Banknote:
+            Insert your Coins/Banknote:
           </h3>
           <div className="space-y-4">
             <div>
@@ -140,7 +140,7 @@ export const PaymentForm = ({ amountDue, onChange }: PaymentFormType) => {
                       setCoin((prevCoins) => [...prevCoins, item]);
                     }}
                   >
-                    {coin}฿
+                    {item}฿
                   </button>
                 ))}
               </div>
@@ -161,7 +161,7 @@ export const PaymentForm = ({ amountDue, onChange }: PaymentFormType) => {
               }
               handleDrop(e);
             }}
-            className="w-full disabled:bg-slate-200 text-center p-2 border-opacity-50 border-spacing-3 h-[100px] lg:h-[200px] border-2 rounded-md border-dashed border-gray-500"
+            className="w-full disabled:bg-slate-200 text-center p-2 border-opacity-50 border-spacing-3 h-[100px] lg:h-[150px] border-2 rounded-md border-dashed border-gray-500"
             placeholder="Drop your Coins or Banknotes here"
             disabled={
               (coin.length > 0 || banknote.length > 0) && amount >= amountDue

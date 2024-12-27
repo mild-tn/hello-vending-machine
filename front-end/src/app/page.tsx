@@ -73,7 +73,7 @@ const Home = () => {
   if (!isClient) return null;
 
   return (
-    <div className="bg-gradient-to-br md:flex flex flex-col items-center h-dvh lg:flex-row justify-center gap-4 xl:gap-10 2xl:gap-11 w-full p-4 from-blue-500 via-violet-200 to-purple-400 text-neutral-100">
+    <div className="bg-gradient-to-br md:flex flex flex-col items-center h-auto lg:flex-row justify-center gap-4 xl:gap-10 2xl:gap-11 w-full p-4 from-blue-500 via-violet-200 to-purple-400 text-neutral-100">
       <Dialog
         open={isOpenModal}
         onClose={() => setIsOpenModal(false)}
