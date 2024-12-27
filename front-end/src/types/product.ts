@@ -5,4 +5,5 @@ export interface Product {
   stockQuantity: number;
   images?: string | string[];
   description?: string;
+  isUpdated?: boolean;
 }

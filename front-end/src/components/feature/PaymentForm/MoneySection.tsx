@@ -1,40 +1,24 @@
-import { Fragment } from "react";
+"use client";
+import { Fragment, useContext } from "react";
 
-type MoneySectionType = {
-  coinList: number[];
-  banknoteList: number[];
-  coin: number[];
-  banknote: number[];
-  amount: number;
-  amountDue: number;
-  setCoin: (value: number[]) => void;
-  setBanknote: (value: number[]) => void;
-  handleDragStart: (
-    e: React.DragEvent<HTMLButtonElement>,
-    value: string,
-    type: string
-  ) => void;
-};
-export const MoneySection = ({
-  coinList,
-  banknoteList,
-  coin,
-  banknote,
-  amount,
-  amountDue,
-  setCoin,
-  setBanknote,
-  handleDragStart,
-}: MoneySectionType) => {
+import { MoneySectionContext } from "@/contexts/MoneySectionContext";
+import { useDragAndDrop } from "@/hooks/useDragAndDrop";
+import { banknoteList, coinList } from "@/usecase/calculate-coin-change";
+
+export const MoneySection = () => {
+  const { handleDragStart } = useDragAndDrop();
+  const { amount, amountDue, banknotes, coins, setBanknotes, setCoins } =
+    useContext(MoneySectionContext);
+
   return (
     <Fragment>
-      <h3 className="text-lg2 font-semibold mb-2">
-        Insert your Coins/Banknote:
+      <h3 className="text-lg2 text-slate-800 font-semibold mb-2">
+        Your Coins/Banknote
       </h3>
       <div className="space-y-4">
         <div>
           <p className="mb-2 font-semibold text-gray-700">Banknotes:</p>
-          <div className="grid grid-cols-5 gap-1">
+          <div className="grid grid-cols-3 gap-1">
             {banknoteList.map((note) => (
               <button
                 key={`${note}_banknote`}
@@ -44,13 +28,13 @@ export const MoneySection = ({
                 }}
                 onClick={(e) => {
                   if (
-                    (coin.length > 0 || banknote.length > 0) &&
+                    (coins.length > 0 || banknotes.length > 0) &&
                     amount >= amountDue
                   ) {
                     e.preventDefault();
                     return;
                   }
-                  setBanknote([...banknote, note]);
+                  setBanknotes([...banknotes, note]);
                 }}
                 className="w-full py-3 bg-green-300 hover:bg-green-400 text-green-800 font-bold rounded shadow"
               >
@@ -71,13 +55,13 @@ export const MoneySection = ({
                 onDragStart={(e) => handleDragStart(e, item.toString(), "coin")}
                 onClick={(e) => {
                   if (
-                    (coin.length > 0 || banknote.length > 0) &&
+                    (coins.length > 0 || banknotes.length > 0) &&
                     amount >= amountDue
                   ) {
                     e.preventDefault();
                     return;
                   }
-                  setCoin([...coin, item]);
+                  setCoins([...coins, item]);
                 }}
               >
                 {item}฿

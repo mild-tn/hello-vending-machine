@@ -1,7 +1,7 @@
 "use client";
 
+import { createContext, useState, useMemo, ReactNode } from "react";
 import { Product } from "@/types/product";
-import { ReactNode, useState, createContext, useMemo } from "react";
 
 interface ProductContextType {
   products: Product[];

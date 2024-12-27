@@ -1,3 +1,6 @@
+export const coinList = [10, 5, 1];
+export const banknoteList = [1000, 500, 100, 50, 20];
+
 export const calculateCoinChange = (
   amount: number,
   coinOrBankList: number[]

@@ -1,27 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { MoneySection } from "./MoneySection";
+import React, { useContext, useEffect, useState } from "react";
 import { MoneyInput } from "./MoneyInput";
 import { useDragAndDrop } from "@/hooks/useDragAndDrop";
-import { calculateCoinChange } from "@/usecase/calculate-coin-change";
+import {
+  banknoteList,
+  calculateCoinChange,
+  coinList,
+} from "@/usecase/calculate-coin-change";
+import { MoneySectionContext } from "@/contexts/MoneySectionContext";
 
-type PaymentFormType = {
-  amountDue: number;
-  onChange: (value: { total: number; totalReturn: number }) => void;
-};
-
-export const PaymentForm = ({ amountDue, onChange }: PaymentFormType) => {
-  const coinList = [10, 5, 1];
-  const banknoteList = [1000, 500, 100, 50, 20];
-  const [coin, setCoin] = useState<number[] | []>([]);
-  const [banknote, setBanknote] = useState<number[] | []>([]);
-  const [totalReturn, setTotalReturn] = useState<number>(0);
-  const [amount, setAmount] = useState<number>(0);
+export const PaymentForm = () => {
+  const {
+    amount,
+    amountDue,
+    banknotes,
+    coins,
+    setAmount,
+    setCoins,
+    setBanknotes,
+    totalReturn,
+    setTotalReturn,
+  } = useContext(MoneySectionContext);
   const [coinChange, setCoinChange] = useState<{ [key: number]: number }>({});
-  const { handleDragOver, handleDragStart, handleDrop } = useDragAndDrop();
+  const { handleDragOver, handleDrop } = useDragAndDrop();
 
   useEffect(() => {
-    const totalCoin = coin?.reduce((acc, curr) => acc + curr, 0);
-    const totalBanknote = banknote?.reduce((acc, curr) => acc + curr, 0);
+    const totalCoin = coins?.reduce((acc, curr) => acc + curr, 0);
+    const totalBanknote = banknotes?.reduce((acc, curr) => acc + curr, 0);
     const total = totalCoin + totalBanknote;
     setTotalReturn(total - amountDue);
     setAmount(total);
@@ -31,56 +35,36 @@ export const PaymentForm = ({ amountDue, onChange }: PaymentFormType) => {
       ...coinList,
     ]);
     setCoinChange(map);
-    onChange({
-      total,
-      totalReturn: total - amountDue,
-    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [coin, banknote, amountDue]);
+  }, [coins, banknotes, amountDue]);
 
   return (
-    <div className="text-neutral-600 sm:w-[500px]">
-      <div className="flex flex-col gap-4 bg-slate-100 p-2 lg:p-4 rounded-lg">
+    <div className="text-neutral-600 bg-slate-100 min-h-[500px]">
+      <div className="flex flex-col gap-4  p-2 lg:p-4 md:rounded-none rounded-lg">
         <div>
-          <div className="text-center mb-4">
-            <h2 className="text-xl font-semibold text-gray-800">
+          <div className="text-center mb-2">
+            <h2 className="text-lg2 font-semibold text-gray-800">
               Amount Due: {amountDue}฿
             </h2>
           </div>
-          <MoneySection
-            coinList={coinList}
-            banknoteList={banknoteList}
-            coin={coin}
-            banknote={banknote}
-            amount={amount}
-            amountDue={amountDue}
-            setCoin={setCoin}
-            setBanknote={setBanknote}
-            handleDragStart={handleDragStart}
-          />
         </div>
         <div className="lg:block hidden">
           <MoneyInput
-            coin={coin}
-            banknote={banknote}
+            coin={coins}
+            banknote={banknotes}
             amount={amount}
             amountDue={amountDue}
             handleDragOver={handleDragOver}
             handleDrop={(e) => {
               handleDrop(e, ({ value, type }) => {
                 if (type === "coin") {
-                  setCoin((prevCoins) =>
-                    prevCoins ? [...prevCoins, Number(value)] : [Number(value)]
-                  );
+                  setCoins([...coins, Number(value)]);
                 } else {
-                  setBanknote((prevBanknotes) =>
-                    prevBanknotes
-                      ? [...prevBanknotes, Number(value)]
-                      : [Number(value)]
-                  );
+                  setBanknotes([...banknotes, Number(value)]);
                 }
               });
             }}
+            isCreateTransactionAfterDrop
           />
         </div>
         <div className="mt-4 space-y-2 text-gray-800">
@@ -105,7 +89,7 @@ export const PaymentForm = ({ amountDue, onChange }: PaymentFormType) => {
           <div className="mt-2">
             <p className="mb-2">Change detail:</p>
             {Object.entries(coinChange).length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3">
                 {Object.entries(coinChange).map(([coin, value]) => (
                   <div
                     key={`_${coin}_${value}`}
