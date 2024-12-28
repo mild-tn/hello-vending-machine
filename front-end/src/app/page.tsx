@@ -12,7 +12,7 @@ const Home = () => {
         <MoneySectionContextProvider>
           <div className="flex flex-row h-fit gap-3">
             <DialogPayment />
-            <div className="w-full flex justify-center flex-col xl:w-[870px] rounded-lg h-full p-3 bg-opacity-45 bg-blend-hard-light bg-sky-100">
+            <div className="w-full flex justify-center flex-col xl:w-[840px] rounded-lg h-full p-3 bg-opacity-45 bg-blend-hard-light bg-sky-100">
               <div className="flex mb-2 justify-center">
                 <div className="sm:text-base md:text-xl font-bold">
                   Blue Vending Machine

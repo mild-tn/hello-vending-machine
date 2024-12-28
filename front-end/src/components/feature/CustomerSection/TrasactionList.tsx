@@ -1,10 +1,10 @@
 "use client";
 import { useTransactionsQuery } from "@/hooks/useTransactions";
-import {
-  banknoteList,
-  calculateCoinChange,
-  coinList,
-} from "../../../usecase/calculate-coin-change";
+// import {
+// banknoteList,
+// calculateCoinChange,
+// coinList,
+// } from "../../../usecase/calculate-coin-change";
 
 export const TransactionList = () => {
   const { data, isLoading } = useTransactionsQuery({
@@ -45,16 +45,16 @@ export const TransactionList = () => {
               <div className="text-sm font-medium text-gray-700">
                 Change Breakdown: {transaction.changeAmount}฿
               </div>
-              {Object.entries(
+              {/* {Object.entries(
                 calculateCoinChange(Number(transaction.changeAmount), [
                   ...banknoteList,
                   ...coinList,
-                ])
+                ], )
               ).map(([denomination, count]) => (
                 <div key={denomination} className="text-sm text-gray-600">
                   {denomination}฿ X {count}
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
         );

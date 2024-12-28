@@ -13,6 +13,16 @@ interface MoneySectionContextType {
   setAmountDue: (number: number) => void;
   setTotalReturn: (number: number) => void;
   resetMoney: () => void;
+  mapCoinChange: {
+    success: boolean;
+    changeUsed: { [key: number]: number };
+    message?: string;
+  };
+  setMapCoinChange: (change: {
+    success: boolean;
+    changeUsed: { [key: number]: number };
+    message?: string;
+  }) => void;
 }
 
 interface MoneySectionContextProviderProps {
@@ -24,12 +34,17 @@ export const MoneySectionContext = createContext<MoneySectionContextType>({
   amount: 0,
   amountDue: 0,
   totalReturn: 0,
+  mapCoinChange: {
+    success: false,
+    changeUsed: {},
+  },
   setCoins: () => {},
   setBanknotes: () => {},
   setAmount: () => {},
   setAmountDue: () => {},
   setTotalReturn: () => {},
   resetMoney: () => {},
+  setMapCoinChange: () => {},
 });
 
 export const MoneySectionContextProvider = ({
@@ -40,11 +55,23 @@ export const MoneySectionContextProvider = ({
   const [amount, setAmount] = useState<number>(0);
   const [amountDue, setAmountDue] = useState<number>(0);
   const [totalReturn, setTotalReturn] = useState<number>(0);
+  const [mapCoinChange, setMapCoinChange] = useState<{
+    success: boolean;
+    changeUsed: { [key: number]: number };
+    message?: string;
+  }>({
+    success: false,
+    changeUsed: {},
+  });
 
   const resetMoney = () => {
     setCoins([]);
     setBanknotes([]);
     setTotalReturn(0);
+    setMapCoinChange({
+      success: false,
+      changeUsed: {},
+    });
   };
 
   const value = useMemo(
@@ -60,6 +87,8 @@ export const MoneySectionContextProvider = ({
       totalReturn,
       setTotalReturn,
       resetMoney,
+      mapCoinChange,
+      setMapCoinChange,
     }),
     [
       coins,
@@ -67,11 +96,13 @@ export const MoneySectionContextProvider = ({
       amount,
       amountDue,
       totalReturn,
+      mapCoinChange,
       setCoins,
       setBanknotes,
       setAmount,
       setAmountDue,
       setTotalReturn,
+      setMapCoinChange,
     ]
   );
 

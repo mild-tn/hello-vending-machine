@@ -32,7 +32,7 @@ export const MoneyInput = ({
         }
         handleDrop(e);
       }}
-      className="w-full whitespace-break-spaces disabled:bg-slate-200 flex-wrap flex text-center p-2 border-opacity-50 border-spacing-3 h-[100px] lg:h-[150px] border-2 rounded-md border-dashed border-gray-500"
+      className="w-full line-clamp-2 whitespace-pre-wrap disabled:bg-slate-200 flex-wrap flex text-center p-2 border-opacity-50 border-spacing-3 h-[100px] lg:h-[150px] border-2 rounded-md border-dashed border-gray-500"
       placeholder="Drop your Coins or Banknotes here"
       disabled={
         ((coin.length > 0 || banknote.length > 0) && amount >= amountDue) ||

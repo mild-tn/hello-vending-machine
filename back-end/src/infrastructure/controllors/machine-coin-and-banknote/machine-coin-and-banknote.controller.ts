@@ -10,7 +10,7 @@ export class MachineCoinAndBanknoteController {
     private readonly getCoinAndBanknoteByIdUsecase: UseCaseProxy<GetCoinBanknoteByMachineIdUseCases>,
   ) {}
 
-  @Get(':id/coin-and-bank-note')
+  @Get(':id/coins-and-banknotes')
   getCoinAndBanknoteByMachineId(@Param('id') id: number) {
     return this.getCoinAndBanknoteByIdUsecase.getInstance().execute(id);
   }

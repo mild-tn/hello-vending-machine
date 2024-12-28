@@ -15,8 +15,13 @@ import { MoneySectionContext } from "@/contexts/MoneySectionContext";
 
 export const ActionButtons = () => {
   const { product, setProduct } = useContext(ProductContext);
-  const { totalReturn, resetMoney, setTotalReturn, setAmountDue } =
-    useContext(MoneySectionContext);
+  const {
+    totalReturn,
+    resetMoney,
+    setTotalReturn,
+    setAmountDue,
+    mapCoinChange,
+  } = useContext(MoneySectionContext);
 
   const { refetch } = useProductsQuery({
     enabled: false,
@@ -31,6 +36,7 @@ export const ActionButtons = () => {
         setProduct({
           ...product,
           stockQuantity: result?.stockQuantity ?? 0,
+          isUpdated: true,
         } as Product);
       });
       refetchTransaction();
@@ -47,11 +53,15 @@ export const ActionButtons = () => {
           setTotalReturn(0);
           setAmountDue(0);
         }}
-        className="bg-red-500  text-neutral-100 rounded-lg px-2 py-1"
+        disabled={!product}
+        className="bg-red-500 disabled:bg-slate-300  text-neutral-100 rounded-lg px-2 py-1"
       >
         <span>Cancel</span>
       </Button>
       <Button
+        disabled={
+          !product || totalReturn < 0 || mapCoinChange.success === false
+        }
         onClick={() => {
           if (product) {
             mutate({
@@ -62,7 +72,7 @@ export const ActionButtons = () => {
             });
           }
         }}
-        className="bg-blue-500 min-w-24 text-neutral-100 rounded-lg px-2 py-1"
+        className="bg-blue-500 disabled:bg-slate-300 min-w-24 text-neutral-100 rounded-lg px-2 py-1"
       >
         <span>Buy</span>
       </Button>

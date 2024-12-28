@@ -29,7 +29,7 @@ export const ProductPreview = () => {
 
   return (
     <div className="flex flex-row gap-4">
-      <div className="w-full">
+      <div className="w-[55%]">
         <div className="flex justify-start items-center bg-blue-700 bg-opacity-40 w-full lg:h-[200px] sm:h-[270px]">
           {!product && (
             <div className="flex flex-col justify-center items-center w-full h-full">
@@ -37,7 +37,7 @@ export const ProductPreview = () => {
             </div>
           )}
           {product && (
-            <div className="flex flex-col lg:flex-row justify-center items-center lg:w-full md:w-[60%] h-full">
+            <div className="flex flex-col lg:flex-row justify-center items-center lg:w-full  h-full">
               <div className="flex flex-row justify-center items-center w-full h-full">
                 <button
                   className="sm:block hidden"
@@ -97,11 +97,11 @@ export const ProductPreview = () => {
               </div>
             </div>
           )}
-          <div className="sm:flex lg:hidden bg-gray-300 justify-center items-center w-[40%] h-full">
+          <div className="sm:flex lg:hidden bg-gray-300 justify-center items-center w-full h-full">
             <PaymentForm />
           </div>
         </div>
-        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 pt-2 gap-x-2 gap-y-3 items-center">
+        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-3 pt-2 gap-x-2 gap-y-3 items-center">
           {isLoading && <div>Loading...</div>}
           {data?.map((product: Product) => (
             <ProductCard
@@ -118,11 +118,11 @@ export const ProductPreview = () => {
         </div>
       </div>
 
-      <div className="w-[40%] lg:block hidden flex-col gap-2">
-        <div className=" bg-slate-100 min-h-[500px]">
+      <div className="w-[45%] lg:block hidden flex-col gap-2">
+        <div className=" bg-slate-100 h-[560px]">
           <PaymentForm />
         </div>
-        <div className="bg-neutral-600 p-1 flex flex-col justify-center items-center w-full mt-2 h-[250px]">
+        <div className="bg-neutral-600 p-1 flex flex-col justify-center items-center w-full mt-2 h-[200px]">
           {!product?.isUpdated && (
             <p className="text-lg font-bold">Get your product here</p>
           )}

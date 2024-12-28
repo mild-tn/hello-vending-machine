@@ -11,7 +11,7 @@ import { Product } from 'src/infrastructure/entities/product.entity';
 
 export class CreateInitialData implements Seeder {
   public async run(dataSource: DataSource): Promise<void> {
-    const product = dataSource.getRepository(Product);
+    const productRepository = dataSource.getRepository(Product);
 
     const products = [
       {
@@ -109,65 +109,78 @@ export class CreateInitialData implements Seeder {
         price: 23.0,
         stockQuantity: 3,
       },
-      {
-        id: 10,
-        name: 'Mars Bar',
-        images: JSON.stringify([
-          'https://st.depositphotos.com/1024764/1717/i/450/depositphotos_17177023-stock-photo-mars-candy-chocolat-bar.jpg',
-          'https://market.borong.com/product-images/677050979e20fc4a47559d51e4697691d28cd3d9.jpg',
-          'https://assets.tops.co.th/MARS-MarsChocolate32g-0000093682923-1',
-        ]),
-        description: 'ช็อกโกแลตแท่งพร้อมนูกัตและคาราเมล รสชาติเข้มข้น',
-        price: 24.0,
-        stockQuantity: 2,
-      },
-      {
-        id: 11,
-        name: 'Pringles',
-        images: JSON.stringify([
-          'https://cdn.imweb.me/thumbnail/20240119/1bbf3fa09f9ce.jpg',
-        ]),
-        description: 'มันฝรั่งทอดกรอบในกระป๋อง หลากหลายรสชาติ',
-        price: 45.0,
-        stockQuantity: 5,
-      },
-      {
-        id: 12,
-        name: 'M&M',
-        images: JSON.stringify([
-          'https://down-th.img.susercontent.com/file/bf80124f2fddb4fc7ca5e141d91fb00c',
-          'https://example.com/images/mms2.jpg',
-          'https://www.newsnationnow.com/wp-content/uploads/sites/108/2023/01/MMsAP22021645371457.jpg?w=1280',
-        ]),
-        description: 'ช็อกโกแลตเคลือบสีสันสดใส อร่อยในทุกคำ',
-        price: 30.0,
-        stockQuantity: 7,
-      },
+      // {
+      //   id: 10,
+      //   name: 'Mars Bar',
+      //   images: JSON.stringify([
+      //     'https://st.depositphotos.com/1024764/1717/i/450/depositphotos_17177023-stock-photo-mars-candy-chocolat-bar.jpg',
+      //     'https://market.borong.com/product-images/677050979e20fc4a47559d51e4697691d28cd3d9.jpg',
+      //     'https://assets.tops.co.th/MARS-MarsChocolate32g-0000093682923-1',
+      //   ]),
+      //   description: 'ช็อกโกแลตแท่งพร้อมนูกัตและคาราเมล รสชาติเข้มข้น',
+      //   price: 24.0,
+      //   stockQuantity: 2,
+      // },
+      // {
+      //   id: 11,
+      //   name: 'Pringles',
+      //   images: JSON.stringify([
+      //     'https://cdn.imweb.me/thumbnail/20240119/1bbf3fa09f9ce.jpg',
+      //   ]),
+      //   description: 'มันฝรั่งทอดกรอบในกระป๋อง หลากหลายรสชาติ',
+      //   price: 45.0,
+      //   stockQuantity: 5,
+      // },
+      // {
+      //   id: 12,
+      //   name: 'M&M',
+      //   images: JSON.stringify([
+      //     'https://down-th.img.susercontent.com/file/bf80124f2fddb4fc7ca5e141d91fb00c',
+      //     'https://example.com/images/mms2.jpg',
+      //     'https://www.newsnationnow.com/wp-content/uploads/sites/108/2023/01/MMsAP22021645371457.jpg?w=1280',
+      //   ]),
+      //   description: 'ช็อกโกแลตเคลือบสีสันสดใส อร่อยในทุกคำ',
+      //   price: 30.0,
+      //   stockQuantity: 7,
+      // },
     ];
 
     for (const productData of products) {
-      console.log('Seeding product:', productData.name);
-      await product.save(productData);
+      const existingProduct = await productRepository.findOne({
+        where: { id: productData.id },
+      });
+      if (!existingProduct) {
+        await productRepository.save(productData);
+      }
     }
 
-    const branch = dataSource.getRepository(Branch);
-    await branch.save({
+    const branchRepository = dataSource.getRepository(Branch);
+    await branchRepository.save({
       location: 'Bangkok',
       name: 'สาขา1',
       manager_name: 'Hello Name',
     });
 
-    const machine = dataSource.getRepository(Machine);
-    await machine.save({ branchId: 1, location: 'Bangkok', name: 'Machine 1' });
-
-    const customer = dataSource.getRepository(Customer);
-    await customer.save({
-      id: 1,
-      name: 'John Smith',
-      phone_number: '095337294',
+    const machineRepository = dataSource.getRepository(Machine);
+    await machineRepository.save({
+      branchId: 1,
+      location: 'Bangkok',
+      name: 'Machine 1',
     });
 
-    const productMachine = dataSource.getRepository(ProductMachine);
+    const customerRepository = dataSource.getRepository(Customer);
+    const existingCustomer = await customerRepository.findOne({
+      where: { id: 1, name: 'John Smith', phone_number: '095337294' },
+    });
+    if (!existingCustomer) {
+      await customerRepository.save({
+        id: 1,
+        name: 'John Smith',
+        phone_number: '095337294',
+      });
+    }
+
+    const productMachineRepository = dataSource.getRepository(ProductMachine);
     const productMachineData = [
       { productId: 1, machineId: 1 },
       { productId: 2, machineId: 1 },
@@ -178,13 +191,18 @@ export class CreateInitialData implements Seeder {
       { productId: 7, machineId: 1 },
       { productId: 8, machineId: 1 },
       { productId: 9, machineId: 1 },
-      { productId: 10, machineId: 1 },
-      { productId: 11, machineId: 1 },
-      { productId: 12, machineId: 1 },
+      // { productId: 10, machineId: 1 },
+      // { productId: 11, machineId: 1 },
+      // { productId: 12, machineId: 1 },
     ];
 
     for (const data of productMachineData) {
-      await productMachine.save(data);
+      const existingProductMachine = await productMachineRepository.findOne({
+        where: { productId: data.productId, machineId: data.machineId },
+      });
+      if (!existingProductMachine) {
+        await productMachineRepository.save(data);
+      }
     }
 
     const coinList = [
@@ -222,12 +240,17 @@ export class CreateInitialData implements Seeder {
       },
     ];
 
-    const coinAndBanknote = dataSource.getRepository(CoinAndBanknote);
+    const coinAndBanknoteRepository = dataSource.getRepository(CoinAndBanknote);
     for (const coinData of coinList) {
-      await coinAndBanknote.save(coinData);
+      const existingCoin = await coinAndBanknoteRepository.findOne({
+        where: { denomination: coinData.denomination, type: coinData.type },
+      });
+      if (!existingCoin) {
+        await coinAndBanknoteRepository.save(coinData);
+      }
     }
 
-    const all = await coinAndBanknote.find();
+    const all = await coinAndBanknoteRepository.find();
     const machineAndCoinData = [];
     for (const coinData of all) {
       machineAndCoinData.push({
@@ -237,15 +260,23 @@ export class CreateInitialData implements Seeder {
       });
     }
 
-    const machineCoinAndBanknote = dataSource.getRepository(
+    const machineCoinAndBanknoteRepository = dataSource.getRepository(
       MachineCoinAndBanknote,
     );
-
     for (const data of machineAndCoinData) {
-      await machineCoinAndBanknote.save(data);
+      const existingMachineCoin =
+        await machineCoinAndBanknoteRepository.findOne({
+          where: {
+            machineId: data.machineId,
+            coinAndBanknoteId: data.coinAndBanknoteId,
+          },
+        });
+      if (!existingMachineCoin) {
+        await machineCoinAndBanknoteRepository.save(data);
+      }
     }
-    console.log('Seeding initial data');
 
+    console.log('Seeding initial data');
     console.log('Initial data has been seeded');
   }
 }

@@ -10,7 +10,7 @@ export const ProductCard = ({
   setSelectedProduct: (product: Product) => void;
 }) => {
   return (
-    <div className="flex flex-col  lg:h-[180px] lg:w-[140px]">
+    <div className="flex flex-col  lg:h-[180px]">
       <button
         disabled={product.stockQuantity === 0}
         onClick={() => setSelectedProduct(product)}
