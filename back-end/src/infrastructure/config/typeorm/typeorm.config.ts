@@ -3,6 +3,8 @@ import { join } from 'path';
 import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
 
+import { ConfigService } from '@nestjs/config';
+
 // Load environment variables from .env file
 console.log('Loading environment variables from .env file', __dirname);
 const envFile = join(__dirname, '../../../../', '.env');
@@ -36,6 +38,26 @@ export const AppDataSource = new DataSource({
   migrationsRun: true,
   migrations: migrationPath,
 });
+
+export const getConfigDatabase = (
+  configService: ConfigService,
+  entityPath: string[],
+  migrationPath: string[],
+) => {
+  return {
+    type: 'postgres',
+    host: configService.get<string>('DATABASE_HOST') || 'localhost',
+    port: configService.get<number>('DATABASE_PORT') || 5432,
+    username: configService.get<string>('DATABASE_USER') || 'api',
+    password: configService.get<string>('DATABASE_PASSWORD') || 'api',
+    database:
+      configService.get<string>('DATABASE_NAME') || 'finance_services_db',
+    entities: entityPath,
+    migrations: migrationPath,
+    synchronize: false,
+    logging: true,
+  };
+};
 
 Logger.log(`entity path: ${entityPath}`);
 Logger.log(`migration path: ${migrationPath}`);

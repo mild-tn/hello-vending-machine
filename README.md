@@ -29,9 +29,7 @@ docker-compose up
 2. Run migrations
 ```bash
 cd back-end
-docker-compose exec api yarn typeorm migration:run
-docker-compose exec api yarn typeorm migration:run --dataSource src/infrastructure/conf
-ig/typeorm/typeorm.config.ts
+docker-compose exec api yarn typeorm migration:run --dataSource src/infrastructure/config/typeorm/typeorm.config.ts
 ```
 3. Run seeds
 ```bash
@@ -57,6 +55,19 @@ back-end:
 cd back-end
 yarn install
 yarn dev
+```
+
+## Run tests
+front-end:
+```bash
+cd front-end
+yarn test
+```
+
+back-end:
+```bash
+cd back-end
+yarn test
 ```
 
 ## OTHER

@@ -84,10 +84,14 @@ export const MoneySection = () => {
                 key={`${note}_banknote`}
                 draggable
                 onDragStart={(e) => {
-                  handleDragStart(e, note.toString(), "banknote");
+                  if (!e.defaultPrevented) {
+                    handleDragStart(e, note.toString(), "banknote");
+                  }
                 }}
                 onClick={(e) => {
-                  handleClick(e, () => setBanknotes([...banknotes, note]));
+                  if (!e.defaultPrevented) {
+                    handleClick(e, () => setBanknotes([...banknotes, note]));
+                  }
                 }}
                 className="w-full py-3 bg-green-300 hover:bg-green-400 text-green-800 font-bold rounded shadow"
               >
@@ -107,7 +111,9 @@ export const MoneySection = () => {
                 className="w-[50px] h-[50px] rounded-full py-3 bg-yellow-300 hover:bg-yellow-400 text-yellow-800 font-bold shadow"
                 onDragStart={(e) => handleDragStart(e, item.toString(), "coin")}
                 onClick={(e) => {
-                  handleClick(e, () => setCoins([...coins, item]));
+                  if (!e.defaultPrevented) {
+                    handleClick(e, () => setCoins([...coins, item]));
+                  }
                 }}
               >
                 {item}฿

@@ -72,8 +72,9 @@ export class CreateTransactionUseCases {
       productMachine,
       stockQuantity: product.stockQuantity,
     } as unknown as Transaction;
-    return await this.transactionRepository.createTransaction(
-      payloadTransaction,
-    );
+    const transaction =
+      await this.transactionRepository.createTransaction(payloadTransaction);
+
+    return transaction;
   }
 }
