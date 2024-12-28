@@ -67,8 +67,7 @@ export class CreateInitialData implements Seeder {
         id: 6,
         name: 'Sprite',
         images: JSON.stringify([
-          'https://example.com/images/sprite1.jpg',
-          'https://example.com/images/sprite2.jpg',
+          'https://www.dohome.co.th/media/catalog/product/cache/e446f15aaa8dc66b80b7a0df334f7c5a/1/0/10155668_bt_p1.jpg',
         ]),
         description: 'น้ำอัดลมกลิ่นมะนาว หวานซ่าเย็นใจ',
         price: 19.0,

@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "assets.tops.co.th" },
       { protocol: "https", hostname: "www.newsnationnow.com" },
       { protocol: "https", hostname: "media.istockphoto.com" },
+      { protocol: "https", hostname: "www.dohome.co.th" },
     ],
   },
 };
