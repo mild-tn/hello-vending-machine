@@ -59,5 +59,8 @@ yarn install
 yarn dev
 ```
 
-## User manual
-image: /docs/user-manual.png
+## OTHER
+- [User Manual](/docs/user-manual.md)
+- [database diagram](/docs/database-diagram.jpg)
+- [Entity Descriptions](/docs/Entity-Decriptsion.md)
+- [API Documentation](/docs/API-document.md)
