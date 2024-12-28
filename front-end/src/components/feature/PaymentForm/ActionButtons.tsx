@@ -12,6 +12,7 @@ import {
   useTransactionsQuery,
 } from "@/hooks/useTransactions";
 import { MoneySectionContext } from "@/contexts/MoneySectionContext";
+import { useQueryMachineCoinAndBanknote } from "@/hooks/useMachineCoinAndBanknote";
 
 export const ActionButtons = () => {
   const { product, setProduct } = useContext(ProductContext);
@@ -21,6 +22,7 @@ export const ActionButtons = () => {
     setTotalReturn,
     setAmountDue,
     mapCoinChange,
+    setMapCoinChange,
   } = useContext(MoneySectionContext);
 
   const { refetch } = useProductsQuery({
@@ -30,6 +32,8 @@ export const ActionButtons = () => {
     enabled: false,
     customerId: 1,
   });
+  const { refetch: refetchMachineCoin } = useQueryMachineCoinAndBanknote(1); // hardcode machine id for now
+
   const { mutate } = useMutationTransaction({
     onSuccess: (result: Transaction) => {
       refetch().then(() => {
@@ -40,7 +44,7 @@ export const ActionButtons = () => {
         } as Product);
       });
       refetchTransaction();
-      resetMoney();
+      refetchMachineCoin();
     },
   });
 
@@ -52,6 +56,10 @@ export const ActionButtons = () => {
           resetMoney();
           setTotalReturn(0);
           setAmountDue(0);
+          setMapCoinChange({
+            success: false,
+            changeUsed: {},
+          });
         }}
         disabled={!product}
         className="bg-red-500 disabled:bg-slate-300  text-neutral-100 rounded-lg px-2 py-1"
@@ -69,6 +77,9 @@ export const ActionButtons = () => {
               changeAmount: totalReturn,
               paidAmount: product.price,
               productId: product.id,
+              changeCoin: mapCoinChange.success
+                ? mapCoinChange.changeUsed
+                : null,
             });
           }
         }}

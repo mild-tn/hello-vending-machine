@@ -9,6 +9,8 @@ The application has the following features:
 - Buy products
 - Return coins
 - Return products
+- Transaction history
+- Update coin/banknote of machine
 
 ## Project stack
 - front-end: Next.js application
@@ -22,20 +24,11 @@ The application has the following features:
 - Yarn (for manual setup)
 
 ## Use Docker to run the project
-1. Install Docker and Docker Compose for start services
+1. Install Docker and Docker Compose for start services, I prepared a docker-compose file that will start the front-end, back-end, database, migrate, and seed (seeding data for start service) services.
 ```bash
 docker-compose up
 ```
-2. Run migrations
-```bash
-cd back-end
-docker-compose exec api yarn typeorm migration:run --dataSource src/infrastructure/config/typeorm/typeorm.config.ts
-```
-3. Run seeds
-```bash
-docker-compose exec api yarn seed
-```
-4. Access the application at http://localhost:3000
+3. Access the application at http://localhost:3000
 
 ## Manual setup
 Database:
@@ -54,19 +47,9 @@ back-end:
 ```bash
 cd back-end
 yarn install
-yarn dev
-```
-
-Run migrations
-```bash
-cd back-end
 yarn typeorm migration:run --dataSource src/infrastructure/config/typeorm/typeorm.config.ts
-```
-
-Run seeds
-```bash
-cd back-end
 yarn seed
+yarn dev
 ```
 
 
@@ -82,6 +65,13 @@ back-end:
 cd back-end
 yarn test
 ```
+
+## Notes improvements
+- Add more tests
+- Support multiple languages (i18n)
+- Support responsive design (for now support only screen > 1024px)
+- Add more error handling
+- Implement Design System (UX/UI) components
 
 ## OTHER
 - [User Manual](/docs/user-manual.md)

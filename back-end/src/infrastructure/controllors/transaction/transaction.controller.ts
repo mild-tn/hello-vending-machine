@@ -21,6 +21,7 @@ export class TransactionController {
       changeAmount: number;
       paidAmount: number;
       productId: number;
+      changeCoin: { [key: number]: number } | null;
     },
   ) {
     return this.createTransactionUseCases.getInstance().execute(transaction);

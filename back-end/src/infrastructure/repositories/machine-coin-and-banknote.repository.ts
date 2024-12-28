@@ -18,4 +18,15 @@ export class MachineCoinAndBanknoteRepository extends Repository<MachineCoinAndB
       relations: ['coinAndBanknote'],
     });
   }
+
+  async updateQuantity(
+    machineId: number,
+    coinAndBanknoteId: number,
+    quantity: number,
+  ): Promise<void> {
+    await this.repository.update(
+      { machineId, coinAndBanknoteId },
+      { quantity },
+    );
+  }
 }

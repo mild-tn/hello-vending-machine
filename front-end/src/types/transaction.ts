@@ -3,6 +3,7 @@ export interface TransactionBody {
   changeAmount: number;
   paidAmount: number;
   productId: number;
+  changeCoin: { [key: number]: number } | null;
 }
 
 export interface Transaction {

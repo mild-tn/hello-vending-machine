@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { MoneyInput } from "./MoneyInput";
 import { useDragAndDrop } from "@/hooks/useDragAndDrop";
 import {
@@ -7,7 +7,7 @@ import {
   coinList,
 } from "@/usecase/calculate-coin-change";
 import { MoneySectionContext } from "@/contexts/MoneySectionContext";
-import { useMachineCoinAndBanknote } from "@/hooks/useMachineCoinAndBanknote";
+import { useQueryMachineCoinAndBanknote } from "@/hooks/useMachineCoinAndBanknote";
 import { ActionButtons } from "./ActionButtons";
 
 export const PaymentForm = () => {
@@ -24,9 +24,8 @@ export const PaymentForm = () => {
     setTotalReturn,
     setMapCoinChange,
   } = useContext(MoneySectionContext);
-  const [coinChange, setCoinChange] = useState<{ [key: number]: number }>({});
   const { handleDragOver, handleDrop } = useDragAndDrop();
-  const { data } = useMachineCoinAndBanknote(1); // hardcode machine id for now
+  const { data } = useQueryMachineCoinAndBanknote(1); // hardcode machine id for now
 
   useEffect(() => {
     const totalCoin = coins?.reduce((acc, curr) => acc + curr, 0);
@@ -41,9 +40,6 @@ export const PaymentForm = () => {
       data?.mapCoinAndQuantity || {}
     );
 
-    if (map.success) {
-      setCoinChange(map.changeUsed);
-    }
     setMapCoinChange(map);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coins, banknotes, amountDue]);
@@ -109,7 +105,16 @@ export const PaymentForm = () => {
           isCreateTransactionAfterDrop
         />
       </div>
-      <div className="lg:mt-4 lg:space-y-2 text-gray-800">
+      <div className="h-[18px] text-base">
+        {mapCoinChange.success ? (
+          <p className="text-green-500 font-bold">
+            Change calculated successfully
+          </p>
+        ) : (
+          <p className="text-red-500  font-bold">{mapCoinChange.message}</p>
+        )}
+      </div>
+      <div className="lg:mt-1 lg:space-y-2 text-gray-800">
         <p className="flex justify-between">
           <span>Total inserted:</span>
           <span className="font-bold">{amount}฿</span>
@@ -130,9 +135,9 @@ export const PaymentForm = () => {
 
         <div className="lg:mt-2">
           <p className="mb-2">Change detail:</p>
-          {Object.entries(coinChange)?.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3">
-              {Object.entries(coinChange).map(([coin, value]) => (
+          {Object.entries(mapCoinChange.changeUsed)?.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
+              {Object.entries(mapCoinChange.changeUsed).map(([coin, value]) => (
                 <div
                   key={`_${coin}_${value}`}
                   className="flex justify-start items-center px-1 py-1 bg-gray-100 rounded shadow-sm"
@@ -146,15 +151,6 @@ export const PaymentForm = () => {
             <p className="font-bold text-gray-500">0฿ x 0</p>
           )}
         </div>
-        {mapCoinChange.success ? (
-          <p className="text-green-500 font-bold">
-            Change calculated successfully
-          </p>
-        ) : (
-          <p className="text-red-500 text-base font-bold">
-            {mapCoinChange.message}
-          </p>
-        )}
       </div>
 
       <div className="pt-3">

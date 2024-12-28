@@ -1,7 +1,7 @@
 import { getCoinAndBanknoteByMachine } from "./../service/machine-coin-and-banknote";
 import { useQuery } from "@tanstack/react-query";
 
-export const useMachineCoinAndBanknote = (machineId: number) => {
+export const useQueryMachineCoinAndBanknote = (machineId: number) => {
   return useQuery({
     queryKey: ["machine", machineId],
     queryFn: async () => {

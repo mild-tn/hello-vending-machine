@@ -49,6 +49,8 @@ export class UsecasesProxyModule {
             TransactionRepository,
             ProductMachineRepository,
             CustomerRepository,
+            MachineCoinAndBanknoteRepository,
+            UsecasesProxyModule.GET_COIN_BANKNOTE_BY_MACHINE_ID_USECASE,
           ],
           provide: UsecasesProxyModule.CREATE_TRANSACTION_USECASE,
           useFactory(
@@ -57,6 +59,8 @@ export class UsecasesProxyModule {
             transactionRepo: TransactionRepository,
             productMachine: ProductMachineRepository,
             customerRepo: CustomerRepository,
+            machineCoinAndBanknoteRepository: MachineCoinAndBanknoteRepository,
+            getCoinAndBanknoteByMachine: UseCaseProxy<GetCoinBanknoteByMachineIdUseCases>,
           ) {
             return new UseCaseProxy(
               new CreateTransactionUseCases(
@@ -65,6 +69,8 @@ export class UsecasesProxyModule {
                 transactionRepo,
                 productMachine,
                 customerRepo,
+                machineCoinAndBanknoteRepository,
+                getCoinAndBanknoteByMachine.getInstance(),
               ),
             );
           },
