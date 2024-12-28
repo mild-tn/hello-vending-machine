@@ -1,22 +1,23 @@
 # hello-vending-machine
 A vending machine application that allows users to buy products using coins.
 
+## Introduction
+This project demonstrates a vending machine system that enables users to simulate real-world scenarios of buying products with coins or banknotes. It is designed to showcase a full-stack application with modern frameworks and best practices for front-end, back-end, and database integration.
+
 ## Project description
-This project is a vending machine application that allows users to buy products using coins. The application has a front-end that allows users to select products and insert coins. The back-end is responsible for managing the products and coins.
-The application has the following features:
-- List products
-- Insert coins
-- Buy products
-- Return coins
-- Return products
-- Transaction history
-- Update coin/banknote of machine
+This project is a vending machine application that includes the following features:
+- Display a list of products.
+- Allow users to insert coins or banknotes.
+- Enable product purchases and return change.
+- Manage product inventory and coin/banknote updates.
+- Provide transaction history.
+- Validate sufficient stock and coins for each transaction.
 
 ## Project stack
-- front-end: Next.js application
-- back-end: Nest.js application
-- vending-machine-db: PostgreSQL database
-- Run CI (CI/CD) with GitHub Actions
+- **Front-end**: Next.js (v13.x) application
+- **Back-end**: Nest.js (v10.x) application
+- **Database**: PostgreSQL (v15.x)
+- **CI/CD**: GitHub Actions for automated testing and deployment
 
 ## Pre-requisites
 - Docker and Docker Compose
@@ -28,22 +29,28 @@ The application has the following features:
 ```bash
 docker-compose up
 ```
-3. Access the application at http://localhost:3000
+2. Access the application at http://localhost:3000
 
 ## Manual setup
-Database:
+If you prefer manual setup, follow these steps:
+
+1. Database:
 ```bash
-docker-compose up vending-machine-db -d
+docker-compose up vending-machine-db -d # start database
+## or
+docker run --name vending-machine-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=vending-machine-db -p 5432:5432 -d postgres:13 # start database
+## or 
+brew install postgresql # install postgresql
 ```
 
-front-end:
+2. Front-end:
 ```bash
 cd front-end
 yarn install
 yarn dev
 ```
 
-back-end:
+3. Back-end:
 ```bash
 cd back-end
 yarn install
@@ -66,12 +73,22 @@ cd back-end
 yarn test
 ```
 
-## Notes improvements
-- Add more tests
-- Support multiple languages (i18n)
-- Support responsive design (for now support only screen > 1024px)
-- Add more error handling
-- Implement Design System (UX/UI) components
+## Notes for Future Improvements
+### Frontend Improvements:
+- Add responsive design for screens smaller than 1024px.
+- Implement internationalization (i18n) to support multiple languages.
+- Refactor components into reusable Design System (UX/UI) components.
+
+### Backend Improvements:
+- Add API validations for:
+  - Ensuring enough coins or banknotes are available to complete a transaction.
+  - Validating sufficient stock levels before completing a purchase.
+- Add error handling for edge cases.
+
+### General Enhancements:
+- Write additional test cases for both front-end and back-end.
+- Extend features such as adding products and coins dynamically.
+- Implement a user authentication system.
 
 ## OTHER
 - [User Manual](/docs/user-manual.md)
