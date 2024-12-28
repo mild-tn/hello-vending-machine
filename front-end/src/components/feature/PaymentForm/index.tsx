@@ -7,6 +7,7 @@ import {
   coinList,
 } from "@/usecase/calculate-coin-change";
 import { MoneySectionContext } from "@/contexts/MoneySectionContext";
+import { ActionButtons } from "./ActionButtons";
 
 export const PaymentForm = () => {
   const {
@@ -40,7 +41,7 @@ export const PaymentForm = () => {
 
   return (
     <div className="text-neutral-600">
-      <div className="flex flex-col gap-4 p-2 lg:p-4 md:rounded-none rounded-lg">
+      <div className="flex justify-between flex-col gap-4 p-2 lg:p-4 md:rounded-none rounded-lg">
         <div>
           <div className="text-center lg:mb-2">
             <h2 className="text-lg lg:text-lg2 font-semibold text-gray-800">
@@ -106,6 +107,9 @@ export const PaymentForm = () => {
               <p className="font-bold text-gray-500">0฿ x 0</p>
             )}
           </div>
+        </div>
+        <div className="pt-3">
+          <ActionButtons />
         </div>
       </div>
     </div>

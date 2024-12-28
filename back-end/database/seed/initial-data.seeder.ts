@@ -1,10 +1,13 @@
+import { DataSource } from 'typeorm';
+import { Seeder } from 'typeorm-extension';
+
 import { Branch } from 'infrastructure/entities/branch.entity';
+import { CoinAndBanknote } from 'infrastructure/entities/coin-and-banknote.entity';
 import { Customer } from 'infrastructure/entities/customer.entity';
+import { MachineCoinAndBanknote } from 'infrastructure/entities/machine-coin-and-banknote.entity';
 import { Machine } from 'infrastructure/entities/machine.entity';
 import { ProductMachine } from 'infrastructure/entities/product-machine.entity';
 import { Product } from 'src/infrastructure/entities/product.entity';
-import { DataSource } from 'typeorm';
-import { Seeder } from 'typeorm-extension';
 
 export class CreateInitialData implements Seeder {
   public async run(dataSource: DataSource): Promise<void> {
@@ -183,6 +186,65 @@ export class CreateInitialData implements Seeder {
     for (const data of productMachineData) {
       await productMachine.save(data);
     }
+
+    const coinList = [
+      {
+        denomination: 1,
+        type: 'COIN',
+      },
+      {
+        denomination: 5,
+        type: 'COIN',
+      },
+      {
+        denomination: 10,
+        type: 'COIN',
+      },
+      {
+        denomination: 20,
+        type: 'BANKNOTE',
+      },
+      {
+        denomination: 50,
+        type: 'BANKNOTE',
+      },
+      {
+        denomination: 100,
+        type: 'BANKNOTE',
+      },
+      {
+        denomination: 500,
+        type: 'BANKNOTE',
+      },
+      {
+        denomination: 1000,
+        type: 'BANKNOTE',
+      },
+    ];
+
+    const coinAndBanknote = dataSource.getRepository(CoinAndBanknote);
+    for (const coinData of coinList) {
+      await coinAndBanknote.save(coinData);
+    }
+
+    const all = await coinAndBanknote.find();
+    const machineAndCoinData = [];
+    for (const coinData of all) {
+      machineAndCoinData.push({
+        machineId: 1,
+        coinAndBanknoteId: coinData.id,
+        quantity: Math.floor(Math.random() * 20),
+      });
+    }
+
+    const machineCoinAndBanknote = dataSource.getRepository(
+      MachineCoinAndBanknote,
+    );
+
+    for (const data of machineAndCoinData) {
+      await machineCoinAndBanknote.save(data);
+    }
+    console.log('Seeding initial data');
 
     console.log('Initial data has been seeded');
   }

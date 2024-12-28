@@ -1,13 +1,6 @@
-import { MoneySectionContext } from "@/contexts/MoneySectionContext";
+import { useContext } from "react";
+
 import { ProductContext } from "@/contexts/ProductContext";
-import { useProductsQuery } from "@/hooks/useProducts";
-import {
-  useMutationTransaction,
-  useTransactionsQuery,
-} from "@/hooks/useTransactions";
-import { Product } from "@/types/product";
-import { Transaction } from "@/types/transaction";
-import { useContext, useEffect } from "react";
 
 type MoneyInputType = {
   coin: number[];
@@ -25,48 +18,8 @@ export const MoneyInput = ({
   amountDue,
   handleDragOver,
   handleDrop,
-  isCreateTransactionAfterDrop = false,
 }: MoneyInputType) => {
-  const { product, setProduct } = useContext(ProductContext);
-  const { totalReturn } = useContext(MoneySectionContext);
-
-  const { refetch } = useProductsQuery({
-    enabled: false,
-  });
-  const { refetch: refetchTransaction } = useTransactionsQuery({
-    enabled: false,
-    customerId: 1,
-  });
-
-  const { mutate } = useMutationTransaction({
-    onSuccess: (result: Transaction) => {
-      refetch().then(() => {
-        setProduct({
-          ...product,
-          stockQuantity: result?.stockQuantity ?? 0,
-          isUpdated: true,
-        } as Product);
-      });
-      refetchTransaction();
-    },
-  });
-
-  useEffect(
-    () => {
-      if (amount >= amountDue && isCreateTransactionAfterDrop) {
-        if (product) {
-          mutate({
-            customerId: 1,
-            changeAmount: totalReturn,
-            paidAmount: product.price,
-            productId: product.id,
-          });
-        }
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [amount, amountDue]
-  );
+  const { product } = useContext(ProductContext);
 
   return (
     <input

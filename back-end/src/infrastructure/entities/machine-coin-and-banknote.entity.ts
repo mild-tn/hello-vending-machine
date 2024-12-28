@@ -18,9 +18,21 @@ export class MachineCoinAndBanknote {
   @JoinColumn({ name: 'machine_id' })
   machine: Machine;
 
+  @Column({
+    name: 'machine_id',
+    nullable: false,
+  })
+  machineId: number;
+
   @ManyToOne(() => CoinAndBanknote)
   @JoinColumn({ name: 'coin_and_banknote_id' })
   coinAndBanknote: CoinAndBanknote;
+
+  @Column({
+    name: 'coin_and_banknote_id',
+    nullable: false,
+  })
+  coinAndBanknoteId: number;
 
   @Column()
   quantity: number;

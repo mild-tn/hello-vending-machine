@@ -7,11 +7,11 @@ services:
       - "5433:5432"
     volumes:
       - vending-machine-db-data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - POSTGRES_USER=api
       - POSTGRES_PASSWORD=wowSecurePassword
       - POSTGRES_DB=vending-machine-db
+      - POSTGRES_HOST_AUTH_METHOD=trust
     networks:
       - vending-machine-network
   api:
@@ -22,15 +22,48 @@ services:
       - "8080:8080"
     depends_on:
       - vending-machine-db
+      - migrate
+      - seed
     environment:
       - DATABASE_HOST=vending-machine-db
       - DATABASE_PORT=5432
       - DATABASE_USER=api
       - DATABASE_PASSWORD=wowSecurePassword
+      - DATABASE_NAME=vending-machine-db
       - NODE_ENV=local
-    volumes:
-      - ./back-end:/app
-      - /app/node_modules
+    networks:
+      - vending-machine-network
+  migrate:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    command: yarn typeorm migration:run --dataSource src/infrastructure/config/typeorm/typeorm.config.ts
+    environment:
+      - DATABASE_HOST=vending-machine-db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=api
+      - DATABASE_PASSWORD=wowSecurePassword
+      - DATABASE_NAME=vending-machine-db
+      - NODE_ENV=local
+    depends_on:
+      - vending-machine-db
+    restart: no
+  seed:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    command: yarn seed
+    environment:
+      - DATABASE_HOST=vending-machine-db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=api
+      - DATABASE_PASSWORD=wowSecurePassword
+      - DATABASE_NAME=vending-machine-db
+      - NODE_ENV=local
+    depends_on:
+      - vending-machine-db
+      - migrate
+    restart: no
     networks:
       - vending-machine-network
   web:

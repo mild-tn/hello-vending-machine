@@ -57,6 +57,19 @@ yarn install
 yarn dev
 ```
 
+Run migrations
+```bash
+cd back-end
+yarn typeorm migration:run --dataSource src/infrastructure/config/typeorm/typeorm.config.ts
+```
+
+Run seeds
+```bash
+cd back-end
+yarn seed
+```
+
+
 ## Run tests
 front-end:
 ```bash

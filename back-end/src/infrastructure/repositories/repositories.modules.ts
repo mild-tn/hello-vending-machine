@@ -8,6 +8,11 @@ import { ProductMachineRepository } from './product-machine.repository';
 import { ProductMachine } from '../entities/product-machine.entity';
 import { Transaction } from '../entities/transaction.entity';
 import { CustomerRepository } from './customer.repository';
+import { MachineCoinAndBanknoteRepository } from './machine-coin-and-banknote.repository';
+import { Customer } from 'infrastructure/entities/customer.entity';
+import { MachineCoinAndBanknote } from 'infrastructure/entities/machine-coin-and-banknote.entity';
+import { CoinAndBanknote } from 'infrastructure/entities/coin-and-banknote.entity';
+import { CoinAndBanknoteRepository } from './coin-and-banknote.repository';
 
 @Module({
   imports: [
@@ -16,7 +21,9 @@ import { CustomerRepository } from './customer.repository';
       ProductMachine,
       Product,
       Transaction,
-      CustomerRepository,
+      Customer,
+      MachineCoinAndBanknote,
+      CoinAndBanknote,
     ]),
   ],
   providers: [
@@ -24,12 +31,16 @@ import { CustomerRepository } from './customer.repository';
     TransactionRepository,
     ProductMachineRepository,
     CustomerRepository,
+    MachineCoinAndBanknoteRepository,
+    CoinAndBanknoteRepository,
   ],
   exports: [
     ProductRepository,
     TransactionRepository,
     ProductMachineRepository,
     CustomerRepository,
+    MachineCoinAndBanknoteRepository,
+    CoinAndBanknoteRepository,
   ],
 })
 export class RepositoriesModule {}
