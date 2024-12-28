@@ -1,6 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoinAndBanknoteRepository } from 'infrastructure/repositories/coin-and-banknote.repository';
-import { MachineCoinAndBanknoteRepository } from 'infrastructure/repositories/machine-coin-and-banknote.repository';
 import { ILogger } from 'src/domain/config/logger.interface';
 
 export class GetCoinBanknoteByTypeUseCases {
