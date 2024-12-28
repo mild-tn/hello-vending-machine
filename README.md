@@ -14,6 +14,7 @@ The application has the following features:
 - front-end: Next.js application
 - back-end: Nest.js application
 - vending-machine-db: PostgreSQL database
+- Run CI (CI/CD) with GitHub Actions
 
 ## Pre-requisites
 - Docker and Docker Compose
