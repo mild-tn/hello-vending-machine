@@ -6,9 +6,7 @@ import * as dotenv from 'dotenv';
 // Load environment variables from .env file
 console.log('Loading environment variables from .env file', __dirname);
 const envFile = join(__dirname, '../../../../', '.env');
-console.log('envFile:', envFile, process.env.DATABASE_HOST);
 dotenv.config({ path: envFile });
-console.log('envFile:', envFile, process.env.DATABASE_HOST);
 
 export const entityPath = [
   join(

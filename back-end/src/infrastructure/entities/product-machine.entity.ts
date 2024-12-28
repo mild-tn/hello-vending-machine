@@ -26,4 +26,10 @@ export class ProductMachine {
   @ManyToOne(() => Machine)
   @JoinColumn({ name: 'machine_id' })
   machine: Machine;
+
+  @Column({
+    name: 'machine_id',
+    nullable: false,
+  })
+  machineId: number;
 }

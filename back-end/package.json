@@ -11,7 +11,8 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/src/main",
+    "seed:run": "yarn build && ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -36,6 +37,8 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
+    "typeorm-extension": "^3.6.3",
+    "typeorm-seeding": "^1.6.1",
     "typeorm-transactional": "^0.5.0"
   },
   "devDependencies": {
@@ -67,15 +70,29 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": "./",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^entities(.*)$": "<rootDir>/src/entities$1",
+      "^repositories(.*)$": "<rootDir>/src/repositories$1",
+      "^infrastructure(.*)$": "<rootDir>/src/infrastructure$1",
+      "^controllers(.*)$": "<rootDir>/src/controllers$1",
+      "^usecases(.*)$": "<rootDir>/src/usecases$1",
+      "^utils(.*)$": "<rootDir>/src/utils$1",
+      "^src(.*)$": "<rootDir>/src$1"
+    },
+    "maxWorkers": 2,
+    "collectCoverage": true,
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "<rootDir>/src/usecases/**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coveragePathIgnorePatterns": [
+      ".mock.(t|j)s"
+    ]
   }
 }

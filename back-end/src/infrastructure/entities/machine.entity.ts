@@ -18,4 +18,10 @@ export class Machine {
   @ManyToOne(() => Branch)
   @JoinColumn({ name: 'branch_id' })
   branch: Branch;
+
+  @Column({
+    name: 'branch_id',
+    nullable: false,
+  })
+  branchId: number;
 }

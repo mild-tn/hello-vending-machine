@@ -12,5 +12,41 @@ services:
       - POSTGRES_USER=api
       - POSTGRES_PASSWORD=wowSecurePassword
       - POSTGRES_DB=vending-machine-db
+    networks:
+      - vending-machine-network
+  api:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - vending-machine-db
+    environment:
+      - DATABASE_HOST=vending-machine-db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=api
+      - DATABASE_PASSWORD=wowSecurePassword
+      - NODE_ENV=local
+    volumes:
+      - ./back-end:/app
+      - /app/node_modules
+    networks:
+      - vending-machine-network
+  web:
+    build: 
+      context: ./front-end
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    environment:
+      - API_URL=http://localhost:8080
+    networks:
+      - vending-machine-network
+
 volumes:
   vending-machine-db-data:
+networks:
+  vending-machine-network:

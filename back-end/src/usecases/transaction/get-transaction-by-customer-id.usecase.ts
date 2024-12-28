@@ -1,4 +1,3 @@
-import { BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILogger } from 'src/domain/config/logger.interface';
 import { TransactionRepository } from 'src/infrastructure/repositories/transaction.repository';
