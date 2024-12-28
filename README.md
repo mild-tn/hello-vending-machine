@@ -1,6 +1,4 @@
 # hello-vending-machine
-A vending machine application that allows users to buy products using coins.
-
 ## Introduction
 This project demonstrates a vending machine system that enables users to simulate real-world scenarios of buying products with coins or banknotes. It is designed to showcase a full-stack application with modern frameworks and best practices for front-end, back-end, and database integration.
 
